@@ -50,7 +50,8 @@
                 <template v-for="(welfare, idx) in welfares" :key="idx">
                     <el-row>
                         <el-col :span="24">
-                            <div>{{welfare.title}} - {{welfare.content}}</div>
+                            <div>{{welfare.title}}</div>
+                            <div :html="welfare.content"></div>
                         </el-col>
                     </el-row>
                 </template>
