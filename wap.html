@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>易得任务网 - 一个做任务就能得奖品的网站</title>
+    <meta name="keywords" content="易得任务网,任务GO,任务狗,任务易"/>
+    <meta name="description" content="做任务的奖品"/>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@next/lib/index.css" />
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+        .van-row{
+            margin-bottom: 40px;
+        }
+        .van-overlay{
+            z-index: 9;
+        }
+        .van-step__title p, .van-step__title h3{
+            margin: 0;
+        }
+        /*.van-swipe .van-swipe-item {*/
+        /*    color: #fff;*/
+        /*    font-size: 20px;*/
+        /*    line-height: 150px;*/
+        /*    text-align: center;*/
+        /*    background-color: #39a9ed;*/
+        /*}*/
+        /*.van-swipe .van-image img{*/
+        /*    width: 100%;*/
+        /*    height: calc(100vw * 1);*/
+        /*}*/
+        .van-swipe .van-swipe-item .swipe-title {
+            line-height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            margin: 0;
+            text-align: left;
+            text-indent: 12px;
+            opacity: .8;
+            background-color: #000;
+            color: #FFF;
+        }
+        #right {
+            position: fixed;
+            right: 10px;
+            top: 30%;
+        }
+        .qrcode {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <van-divider><h3>介绍</h3></van-divider>
+        <van-row justify="center">
+            <van-col span="22">
+                <van-steps direction="vertical" :active="0" :step-font-size="8" v-for="row in intro" :key="k">
+                    <van-step>
+                        <p>{{row}}</p>
+                    </van-step>
+<!--                    <van-step>-->
+<!--                        <p>步骤一：选择下列任务之一</p>-->
+<!--                    </van-step>-->
+<!--                    <van-step>-->
+<!--                        <p>步骤二：确定完成后用微信扫右方二维码添加客服微信回复任务编号+收获地址(姓名+地址+手机号)</p>-->
+<!--                    </van-step>-->
+<!--                    <van-step>-->
+<!--                        <p>步骤三：确认通过后客服会将快递单号发给您</p>-->
+<!--                    </van-step>-->
+<!--                    <van-step>-->
+<!--                        <p>注：每个手机号每个任务只能做一次; 一般每天审核一次（晚上）</p>-->
+<!--                    </van-step>-->
+                </van-steps>
+            </van-col>
+        </van-row>
+
+        <van-divider><h3>奖品</h3></van-divider>
+        <van-row justify="center">
+            <van-col span="22">
+                <van-swipe class="my-swipe" :autoplay="3000" lazy-render indicator-color="white" ref="swipe">
+                    <van-swipe-item v-for="award in awards" :key="award">
+                        <van-image
+                                width="100%"
+                                lazy-load
+                                :src="award.image"
+                        />
+                        <span class="swipe-title">{{award.title}}</span>
+                    </van-swipe-item>
+                </van-swipe>
+            </van-col>
+        </van-row>
+
+        <van-divider><h3>任务</h3></van-divider>
+        <van-row justify="center">
+            <van-col span="22">
+                <van-collapse v-model="activeNames">
+                    <template v-for="task in tasks" :key="k">
+                        <van-collapse-item :title="task.title" :name="k">{{task.content}}</van-collapse-item>
+                    </template>
+                </van-collapse>
+<!--                <van-collapse v-model="activeNames">-->
+<!--                    <van-collapse-item title="标题1" name="1">内容</van-collapse-item>-->
+<!--                    <van-collapse-item title="标题2" name="2">内容</van-collapse-item>-->
+<!--                    <van-collapse-item title="标题3" name="3">内容</van-collapse-item>-->
+<!--                </van-collapse>-->
+            </van-col>
+        </van-row>
+
+        <van-overlay :show="show" @click="show = false">
+            <div class="qrcode">
+                <van-image width="200" height="200" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+            </div>
+        </van-overlay>
+
+        <div id="right">
+            <!-- <van-image width="50" height="50" src="https://img.yzcdn.cn/vant/cat.jpeg" /> -->
+            <!-- <van-icon name="chat-o" size="3rem" /> -->
+            <van-icon name="wechat" size="3rem" badge="1" color="#ee0a24" @click="show = true" />
+        </div>
+    </div>
+
+
+    <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@next/lib/vant.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mobile-detect@1.4.5/mobile-detect.min.js"></script>
+
+    <script type="module">
+        var md = new MobileDetect(window.navigator.userAgent);
+        if(md.mobile() == null) {
+            location.href = './index.html';
+        }
+        
+        // 在 #app 标签下渲染一个按钮组件
+        const app = Vue.createApp({
+            // template: `<van-button>按钮</van-button>`,
+            data() {
+                return {
+                    activeNames: Vue.ref(['0']),
+                    time: new Date().toLocaleString(),
+                    intro: [],
+                    awards: [],
+                    tasks: [],
+                }
+            },
+            setup(props) {
+                console.log('props', props.time);
+
+                // const awards = [
+                //     // 'https://cbu01.alicdn.com/img/ibank/2020/567/572/22525275765_1733232050.240x240.jpg_.webp',
+                //     // 'https://cbu01.alicdn.com/img/ibank/2018/926/151/7151629_983218335.jpg_.webp',
+                //     // 'https://cbu01.alicdn.com/img/ibank/2018/619/634/9440436916_1140967343.jpg_.webp',
+                //     // 'https://cbu01.alicdn.com/img/ibank/2016/336/344/3620443633_646400951.240x240.jpg_.webp',
+                // ];
+                const show = Vue.ref(false);
+                return { show };
+            },
+            beforeCreate() {
+                console.log('beforeCreate');
+            },
+            created() {
+                console.log('created');
+
+                this.updateTime();
+                // setInterval(() => {
+                //     this.time = new Date().toLocaleString();
+                // }, 1000);
+            },
+            beforeMount() {
+                console.log('beforeMount');
+            },
+            mounted() {
+                console.log('mounted');
+
+                this.getData();
+            },
+            beforeUpdate() {
+                console.log('beforeUpdate');
+            },
+            updated() {
+                console.log('updated');
+            },
+            beforeUnmount() {
+                console.log('beforeUnmount');
+            },
+            unmounted() {
+                console.log('unmounted');
+            },
+
+            watch: {
+                time(newTime, oldTime) {
+                    // console.log(newTime);
+                    // console.log(oldTime);
+                }
+            },
+            methods: {
+                updateTime() {
+                    setInterval(() => {
+                        this.time = new Date().toLocaleString();
+                    }, 1000);
+                },
+                now() {
+                    console.log('now');
+                    return new Date().toLocaleString();
+                },
+                getData() {
+                    var _this = this
+                    // 为给定 ID 的 user 创建请求
+                    axios.get('./mock.json')
+                        .then(function (resp) {
+                            console.log(resp);
+                            if(resp.status == 200) {
+                                _this.intro = resp.data.intro;
+                                console.log(_this.awards)
+                                _this.awards = resp.data.awards;
+                                console.log(resp.data.awards)
+                                console.log(_this.awards)
+                                _this.tasks = resp.data.tasks;
+                            } else {
+                                vant.Toast(resp.statusText);
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                }
+            },
+            computed: {
+                now2() {
+                    // console.log('now2');
+                    // return new Date().toLocaleString();
+                    return this.time;
+                }
+            },
+        });
+        app.use(vant);
+
+        // 通过 CDN 引入时不会自动注册 Lazyload 组件
+        // 可以通过下面的方式手动注册
+        app.use(vant.Lazyload);
+
+        // 调用函数组件，弹出一个 Toast
+        // vant.Toast('提示');
+
+        app.use(vant.Step);
+        app.use(vant.Steps);
+
+        // export default {
+        //     steup() {
+        //         const active = ref(1);
+        //         const activeNames = ref(['1']);
+        //         return { active, activeNames };
+        //     },
+        // };
+
+        app.use(vant.Swipe);
+        app.use(vant.SwipeItem);
+
+        app.use(vant.Card);
+
+        app.use(vant.Collapse);
+        app.use(vant.CollapseItem);
+
+        app.use(vant.Divider);
+
+        app.use(vant.Icon);
+
+        app.use(vant.Overlay);
+
+        app.use(vant.Image);
+
+        app.use(vant.Lazyload);
+
+
+        const vm = app.mount('#app');
+        vm.$refs.swipe.resize();
+        console.log(app.activeNames);
+        console.log(vm.activeNames);
+
+        // setInterval(() => {
+        //     vm.$data.time = new Date().toLocaleString();
+        // }, 1000);
+    </script>
+</body>
+</html>
