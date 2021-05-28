@@ -40,7 +40,7 @@
                     <template v-for="(welfare, idx) in welfares" :key="idx">
                         <el-timeline-item :timestamp="welfare.time" placement="top">
                           <el-card>
-                            <h4>{{welfare.title}}</h4>
+                            <h3>{{welfare.title}}</h3>
                             <p v-html="welfare.content" class="card-content"></p>
                           </el-card>
                         </el-timeline-item>
