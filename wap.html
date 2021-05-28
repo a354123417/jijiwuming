@@ -78,11 +78,11 @@
             </van-col>
         </van-row>
 
-        <van-overlay :show="show" @click="show = false">
+        <!--<van-overlay :show="show" @click="show = false">
             <div class="qrcode">
                 <van-image width="200" height="200" src="https://img.yzcdn.cn/vant/cat.jpeg" />
             </div>
-        </van-overlay>
+        </van-overlay>-->
 
         <div id="right">
             <!-- <van-image width="50" height="50" src="https://img.yzcdn.cn/vant/cat.jpeg" /> -->
@@ -237,15 +237,15 @@
 
         app.use(vant.Overlay);
 
-        app.use(vant.Image);
+        // app.use(vant.Image);
 
-        app.use(vant.Lazyload);
+        // app.use(vant.Lazyload);
 
 
         const vm = app.mount('#app');
-        vm.$refs.swipe.resize();
-        console.log(app.activeNames);
-        console.log(vm.activeNames);
+        // vm.$refs.swipe.resize();
+        // console.log(app.activeNames);
+        // console.log(vm.activeNames);
 
         // setInterval(() => {
         //     vm.$data.time = new Date().toLocaleString();
