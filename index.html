@@ -135,7 +135,7 @@
                 },
                 formatTime(timestamp) {
                     console.log(timestamp, typeof(timestamp));
-                    return moment(timestamp * 1e3).format('YYYY-MM-DD');
+                    return moment(timestamp * 1e3).format('YYYY-MM-DD HH:mm:ss');
                 },
                 getData() {
                     var _this = this
