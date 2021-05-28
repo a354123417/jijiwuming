@@ -15,7 +15,7 @@
             display: none;
         }
         #app{ width: 960px; margin: auto; }
-        .el-row{
+        .el-row, el-card{
             margin-bottom: 20px;
         }
         .el-row:last-child {
@@ -40,7 +40,7 @@
                     <el-card class="box-card">
                       <template #header>
                         <div class="card-header">
-                          <span>{{welfare.title}}</span>
+                          <h2>{{welfare.title}}</h2>
                         </div>
                       </template>
                       <div v-html="welfare.content" class="card-content"></div>
