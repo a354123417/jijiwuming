@@ -38,7 +38,7 @@
             <el-main>
                 <el-timeline>
                     <template v-for="(welfare, idx) in welfares" :key="idx">
-                        <el-timeline-item :timestamp="formatTime(welfare.time)" placement="top">
+                        <el-timeline-item :timestamp="welfare.time * 1000" placement="top">
                           <el-card>
                             <h3>{{welfare.title}}</h3>
                             <p v-html="welfare.content" class="card-content"></p>
@@ -134,7 +134,8 @@
                     return new Date().toLocaleString();
                 },
                 formatTime(timestamp) {
-                    return moment(timestamp).format('YYYY-MM-DD');
+                    console.log(timestamp, typeof(timestamp));
+                    return moment(timestamp * 1e3).format('YYYY-MM-DD');
                 },
                 getData() {
                     var _this = this
