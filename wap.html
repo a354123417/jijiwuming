@@ -14,39 +14,15 @@
         [v-cloak]{
             display: none;
         }
-        .van-row{
+        body {
+            background: #f7f8fa;
+        }
+        .van-row {
+            margin-top: 20px;
             margin-bottom: 40px;
         }
-        .van-overlay{
+        .van-overlay {
             z-index: 9;
-        }
-        .van-step__title p, .van-step__title h3{
-            margin: 0;
-        }
-        /*.van-swipe .van-swipe-item {*/
-        /*    color: #fff;*/
-        /*    font-size: 20px;*/
-        /*    line-height: 150px;*/
-        /*    text-align: center;*/
-        /*    background-color: #39a9ed;*/
-        /*}*/
-        /*.van-swipe .van-image img{*/
-        /*    width: 100%;*/
-        /*    height: calc(100vw * 1);*/
-        /*}*/
-        .van-swipe .van-swipe-item .swipe-title {
-            line-height: 30px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            margin: 0;
-            text-align: left;
-            text-indent: 12px;
-            opacity: .8;
-            background-color: #000;
-            color: #FFF;
         }
         #right {
             position: fixed;
@@ -59,22 +35,24 @@
             justify-content: center;
             height: 100%;
         }
+        .content p img {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <div id="app" v-cloak>
+        <van-nav-bar title="福利GO"></van-nav-bar>
         <van-row justify="center">
-            <van-col span="22">
+            <van-col span="24">
                 <van-collapse v-model="activeNames">
                     <template v-for="(welfare, idx) in welfares" :key="idx">
-                        <van-collapse-item :title="welfare.title" :name="k">{{welfare.content}}</van-collapse-item>
+                        <van-collapse-item :title="welfare.title" :name="idx">
+                            <span v-html="welfare.content" class="content"></span>
+                        </van-collapse-item>
                     </template>
                 </van-collapse>
-<!--                <van-collapse v-model="activeNames">-->
-<!--                    <van-collapse-item title="标题1" name="1">内容</van-collapse-item>-->
-<!--                    <van-collapse-item title="标题2" name="2">内容</van-collapse-item>-->
-<!--                    <van-collapse-item title="标题3" name="3">内容</van-collapse-item>-->
-<!--                </van-collapse>-->
             </van-col>
         </van-row>
 
@@ -123,7 +101,10 @@
                 //     // 'https://cbu01.alicdn.com/img/ibank/2016/336/344/3620443633_646400951.240x240.jpg_.webp',
                 // ];
                 const show = Vue.ref(false);
-                return { show };
+
+                const activeNames = Vue.ref(['1']);
+
+                return { show, activeNames };
             },
             beforeCreate() {
                 console.log('beforeCreate');
@@ -207,13 +188,15 @@
 
         // 通过 CDN 引入时不会自动注册 Lazyload 组件
         // 可以通过下面的方式手动注册
-        app.use(vant.Lazyload);
+        // app.use(vant.Lazyload);
 
         // 调用函数组件，弹出一个 Toast
         // vant.Toast('提示');
 
-        app.use(vant.Step);
-        app.use(vant.Steps);
+        // app.use(vant.NavBar);
+
+        // app.use(vant.Step);
+        // app.use(vant.Steps);
 
         // export default {
         //     steup() {
@@ -223,22 +206,15 @@
         //     },
         // };
 
-        app.use(vant.Swipe);
-        app.use(vant.SwipeItem);
-
-        app.use(vant.Card);
-
-        app.use(vant.Collapse);
-        app.use(vant.CollapseItem);
-
-        app.use(vant.Divider);
-
-        app.use(vant.Icon);
-
-        app.use(vant.Overlay);
-
+        // app.use(vant.Swipe);
+        // app.use(vant.SwipeItem);
+        // app.use(vant.Card);
+        // app.use(vant.Collapse);
+        // app.use(vant.CollapseItem);
+        // app.use(vant.Divider);
+        // app.use(vant.Icon);
+        // app.use(vant.Overlay);
         // app.use(vant.Image);
-
         // app.use(vant.Lazyload);
 
 
