@@ -47,10 +47,10 @@
         <el-container>
             <el-header></el-header>
             <el-main>
-                <template v-for="(welfare, idx) in welfares" :key="task">
+                <template v-for="(welfare, idx) in welfares" :key="idx">
                     <el-row>
                         <el-col :span="24">
-                            <div>{{welfare.content}}</div>
+                            <div>{{welfare.title}} - {{welfare.content}}</div>
                         </el-col>
                     </el-row>
                 </template>
@@ -131,7 +131,8 @@
                         .then(function (resp) {
                             console.log(resp);
                             if(resp.status == 200) {
-                                _this.welfares = resp.data.tasks;
+                                _this.welfares = resp.data;
+                                console.log(_this.welfares);
                             } else {
                                 vant.Toast(resp.statusText);
                             }
