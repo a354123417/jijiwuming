@@ -63,46 +63,6 @@
 </head>
 <body>
     <div id="app" v-cloak>
-        <van-divider><h3>介绍</h3></van-divider>
-        <van-row justify="center">
-            <van-col span="22">
-                <van-steps direction="vertical" :active="0" :step-font-size="8" v-for="row in intro" :key="k">
-                    <van-step>
-                        <p>{{row}}</p>
-                    </van-step>
-<!--                    <van-step>-->
-<!--                        <p>步骤一：选择下列任务之一</p>-->
-<!--                    </van-step>-->
-<!--                    <van-step>-->
-<!--                        <p>步骤二：确定完成后用微信扫右方二维码添加客服微信回复任务编号+收获地址(姓名+地址+手机号)</p>-->
-<!--                    </van-step>-->
-<!--                    <van-step>-->
-<!--                        <p>步骤三：确认通过后客服会将快递单号发给您</p>-->
-<!--                    </van-step>-->
-<!--                    <van-step>-->
-<!--                        <p>注：每个手机号每个任务只能做一次; 一般每天审核一次（晚上）</p>-->
-<!--                    </van-step>-->
-                </van-steps>
-            </van-col>
-        </van-row>
-
-        <van-divider><h3>奖品</h3></van-divider>
-        <van-row justify="center">
-            <van-col span="22">
-                <van-swipe class="my-swipe" :autoplay="3000" lazy-render indicator-color="white" ref="swipe">
-                    <van-swipe-item v-for="award in awards" :key="award">
-                        <van-image
-                                width="100%"
-                                lazy-load
-                                :src="award.image"
-                        />
-                        <span class="swipe-title">{{award.title}}</span>
-                    </van-swipe-item>
-                </van-swipe>
-            </van-col>
-        </van-row>
-
-        <van-divider><h3>任务</h3></van-divider>
         <van-row justify="center">
             <van-col span="22">
                 <van-collapse v-model="activeNames">
@@ -127,7 +87,7 @@
         <div id="right">
             <!-- <van-image width="50" height="50" src="https://img.yzcdn.cn/vant/cat.jpeg" /> -->
             <!-- <van-icon name="chat-o" size="3rem" /> -->
-            <van-icon name="wechat" size="3rem" badge="1" color="#ee0a24" @click="show = true" />
+            <!--<van-icon name="wechat" size="3rem" badge="1" color="#ee0a24" @click="show = true" />-->
         </div>
     </div>
 
