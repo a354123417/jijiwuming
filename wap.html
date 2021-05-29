@@ -161,7 +161,7 @@
                 getData() {
                     var _this = this
                     // 为给定 ID 的 user 创建请求
-                    axios.get('./mocks/welfares.json')
+                    axios.get('./mocks/welfares.json?_=' + new Date().getTime())
                         .then(function (resp) {
                             console.log(resp);
                             if(resp.status == 200) {
