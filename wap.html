@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
     <title>福利GO</title>
-    <meta name="keywords" content="福利GO,福利,线报"/>
+    <meta name="keywords" content="福利GO,福利,线报,福利姬"/>
     <meta name="description" content=""/>
     <!-- 引入样式文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@next/lib/index.css" />
@@ -161,7 +161,7 @@
                 getData() {
                     var _this = this
                     // 为给定 ID 的 user 创建请求
-                    axios.get('./mocks/welfare.json')
+                    axios.get('./mocks/welfares.json')
                         .then(function (resp) {
                             console.log(resp);
                             if(resp.status == 200) {
