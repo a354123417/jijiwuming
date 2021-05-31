@@ -36,6 +36,9 @@
             justify-content: center;
             height: 100%;
         }
+		.unread .van-cell__title {
+			color: red;
+		}
         .content img {
             width: 100%;
             height: auto;
@@ -63,7 +66,7 @@
             <van-col span="24">
                 <van-collapse v-model="activeNames">
                     <template v-for="(welfare, idx) in welfares" :key="idx">
-                        <van-collapse-item :title="welfare.title" :name="idx">
+                        <van-collapse-item :title="welfare.title" :name="idx" :class="welfare.is_read ? 'read' : 'unread'">
                             <span v-html="welfare.content" class="content"></span>
                         </van-collapse-item>
                     </template>
@@ -104,6 +107,8 @@
             data() {
                 return {
                     welfares: [],
+					cache_key: 'storage_titles',
+					storage_titles: []
                 }
             },
             setup(props) {
@@ -182,6 +187,9 @@
                             if(resp.status == 200) {
                                 _this.welfares = resp.data;
                                 console.log(_this.welfares);
+								for(var i in _this.welfares) {
+									_this.welfares[i]['is_read'] = _this.checkRead(_this.welfares[i]['title']);
+								}
                             } else {
                                 vant.Toast(resp.statusText);
                             }
@@ -189,7 +197,22 @@
                         .catch(function (err) {
                             console.log(err);
                         });
-                }
+                },
+				initStorageTitle() {
+					var cache_titles = localStorage.getItem(this.cache_key)
+					this.storage_titles = cache_titles == null ? [] : JSON.parse(cache_titles);
+					console.log(this.storage_titles);
+				},
+				checkRead(title){
+					console.log(title, this.storage_titles.includes(title));
+					if(this.storage_titles.includes(title)) {
+						return true;
+					} else {
+						this.storage_titles.push(title);
+						localStorage.setItem(this.cache_key, JSON.stringify(this.storage_titles));
+						return false;
+					}
+				}
             },
             computed: {
                 now2() {
