@@ -245,6 +245,12 @@
                                 break;
                             }
                         }
+                        if(Object.keys(this.welfare) == 0) {
+                            vant.Toast('活动已失效');
+                            setTimeout(() => {
+                                location.href = '/wap.html';
+                            }, 1500);
+                        }
                         console.log(this.welfare);
                     }
                 }
