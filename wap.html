@@ -18,7 +18,7 @@
         body {
             background: #f7f8fa;
         }
-        .van-row {
+        .mt-20 {
             margin-top: 20px;
             margin-bottom: 40px;
         }
@@ -39,7 +39,7 @@
 		.unread .van-cell__title {
 			color: red;
 		}
-        .content img {
+        img {
             width: 100%;
             height: auto;
         }
@@ -49,7 +49,7 @@
         (function() {
           var hm = document.createElement("script");
           hm.src = "https://hm.baidu.com/hm.js?5e83fbdf9f5f2de6447d71bc642d5653";
-          var s = document.getElementsByTagName("script")[0]; 
+          var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
         })();
     </script>
@@ -62,17 +62,29 @@
 <body>
     <div id="app" v-cloak>
         <van-nav-bar title="福利GO"></van-nav-bar>
-        <van-row justify="center">
-            <van-col span="24">
-                <van-collapse v-model="activeNames">
-                    <template v-for="(welfare, idx) in welfares" :key="idx">
-                        <van-collapse-item :title="welfare.title" :name="idx" :class="welfare.is_read ? 'read' : 'unread'">
-                            <span v-html="welfare.content" class="content"></span>
-                        </van-collapse-item>
-                    </template>
-                </van-collapse>
-            </van-col>
-        </van-row>
+        <template v-if="id == null">
+            <van-row justify="center" class="mt-20">
+                <van-col span="24">
+                    <van-collapse v-model="activeNames">
+                        <template v-for="(welfare, idx) in welfares" :key="idx">
+                            <van-collapse-item :title="welfare.title" :name="idx" :class="welfare.is_read ? 'read' : 'unread'">
+                                <span v-html="welfare.content" class="content"></span>
+                            </van-collapse-item>
+                        </template>
+                    </van-collapse>
+                </van-col>
+            </van-row>
+        </template>
+        <template v-else>
+            <van-row justify="center">
+                <van-col span="22">
+                    <h5 v-html="welfare.title"></h5>
+                </van-col>
+                <van-col span="22">
+                    <div v-html="welfare.content"></div>
+                </van-col>
+            </van-row>
+        </template>
 
         <!--<van-overlay :show="show" @click="show = false">
             <div class="qrcode">
@@ -90,6 +102,7 @@
 <!--     <script src="https://cdn.jsdelivr.net/npm/@babel/polyfill@7.12.1/lib/index.min.js"></script> -->
     <!-- 引入 Vue 和 Vant 的 JS 文件 -->
     <script src="https://cdn.jsdelivr.net/npm/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4.0.11/dist/vue-router.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vant@next/lib/vant.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mobile-detect@1.4.5/mobile-detect.min.js"></script>
@@ -100,13 +113,17 @@
         if(md.mobile() == null) {
             location.href = './index.html';
         }
-        
+
+        var searchParams = new URLSearchParams(location.search);
+
         // 在 #app 标签下渲染一个按钮组件
         const app = Vue.createApp({
             // template: `<van-button>按钮</van-button>`,
             data() {
                 return {
+                    id: searchParams.get('id'),
                     welfares: [],
+                    welfare: {},
 					cache_key: 'storage_titles',
 					storage_titles: []
                 }
@@ -141,9 +158,9 @@
                 console.log('beforeMount');
             },
             mounted() {
-                console.log('mounted');
+                console.log('mounted', this.id);
 
-		this.initStorageTitle();
+		        this.initStorageTitle();
                 this.getData();
             },
             beforeUpdate() {
@@ -176,7 +193,7 @@
                     return new Date().toLocaleString();
                 },
                 formatTime(timestamp) {
-                    console.log(timestamp, typeof(timestamp));
+                    // console.log(timestamp, typeof(timestamp));
                     return moment(timestamp * 1e3).format('YYYY-MM-DD HH:mm:ss');
                 },
                 getData() {
@@ -184,13 +201,14 @@
                     // 为给定 ID 的 user 创建请求
                     axios.get('./mocks/welfares.json?_=' + moment().format('YYYYMMDDHHmm'))
                         .then(function (resp) {
-                            console.log(resp);
+                            // console.log(resp);
                             if(resp.status == 200) {
                                 _this.welfares = resp.data;
-                                console.log(_this.welfares);
+                                // console.log(_this.welfares);
 								for(var i in _this.welfares) {
 									_this.welfares[i]['is_read'] = _this.checkRead(_this.welfares[i]['title']);
 								}
+								_this.getWelfare();
                             } else {
                                 vant.Toast(resp.statusText);
                             }
@@ -202,10 +220,10 @@
 				initStorageTitle() {
 					var cache_titles = localStorage.getItem(this.cache_key)
 					this.storage_titles = cache_titles == null ? [] : JSON.parse(cache_titles);
-					console.log(this.storage_titles);
+					// console.log(this.storage_titles);
 				},
-				checkRead(title){
-					console.log(title, this.storage_titles.includes(title));
+				checkRead(title) {
+					// console.log(title, this.storage_titles.includes(title));
 					if(this.storage_titles.includes(title)) {
 						return true;
 					} else {
@@ -213,7 +231,22 @@
 						localStorage.setItem(this.cache_key, JSON.stringify(this.storage_titles));
 						return false;
 					}
-				}
+				},
+                getWelfare() {
+                    console.log('getWelfare', this.id);
+                    if(this.id) {
+                        // console.log('getWelfare1', this.welfares);
+                        for(var i in this.welfares) {
+                            // console.log(this.welfares[i]);
+                            // console.log(this.id, this.welfares[i].time);
+                            if(this.id == this.welfares[i].time) {
+                                this.welfare = this.welfares[i];
+                                break;
+                            }
+                        }
+                        console.log(this.welfare);
+                    }
+                }
             },
             computed: {
                 now2() {
