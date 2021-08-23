@@ -286,7 +286,8 @@
                 },
                 generateQrcode() {
                     if(this.show_qrcode) {
-                        this.qrcode_url = "https://www.jijiwuming.com?id=" + this.id;
+                        this.qrcode_url = "https://www.jijiwuming.com/wap.html?id=" + this.id;
+                        console.log('qurcode_url:' + this.qrcode_url)
                         new QRCode(document.getElementById("qrcode"), this.qrcode_url);
                         // var qrcode = new QRCode(document.getElementById("qrcode"), {
                         //     text: "http://jindo.dev.naver.com/collie",
