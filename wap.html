@@ -92,23 +92,25 @@
                     </van-divider>
                 </van-col>
             </van-row>
-            <van-row justify="center">
-                <van-col span="6" v-if="show_qrcode">
-                    <div id="qrcode"></div>
-                </van-col>
-            </van-row>
-            <van-row justify="center">
-                <van-col span="24">
-                    <van-divider :style="{ color: '#000', borderColor: '#000', padding: '0 16px' }">
-                        手机扫一扫
-                    </van-divider>
-                </van-col>
-            </van-row>
-<!--            <van-row justify="center">-->
-<!--                <van-col span="22">-->
-<!--                    <div v-text="qrcode_url"></div>-->
-<!--                </van-col>-->
-<!--            </van-row>-->
+            <template v-if="show_qrcode">
+                <van-row justify="center">
+                    <van-col span="6">
+                        <div id="qrcode"></div>
+                    </van-col>
+                </van-row>
+                <van-row justify="center">
+                    <van-col span="24">
+                        <van-divider :style="{ color: '#000', borderColor: '#000', padding: '0 16px' }">
+                            手机扫一扫
+                        </van-divider>
+                    </van-col>
+                </van-row>
+<!--                <van-row justify="center">-->
+<!--                    <van-col span="22">-->
+<!--                        <div v-text="qrcode_url"></div>-->
+<!--                    </van-col>-->
+<!--                </van-row>-->
+            </template>
         </template>
 
         <!--<van-overlay :show="show" @click="show = false">
