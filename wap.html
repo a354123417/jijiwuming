@@ -79,10 +79,36 @@
                 <van-col span="22">
                     <h5 v-html="welfare.title"></h5>
                 </van-col>
+            </van-row>
+            <van-row justify="center">
                 <van-col span="22">
                     <div v-html="welfare.content"></div>
                 </van-col>
             </van-row>
+            <van-row justify="center">
+                <van-col span="24">
+                    <van-divider :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }">
+                        微博 @程抱猫
+                    </van-divider>
+                </van-col>
+            </van-row>
+            <van-row justify="center">
+                <van-col span="6" v-if="show_qrcode">
+                    <div id="qrcode"></div>
+                </van-col>
+            </van-row>
+            <van-row justify="center">
+                <van-col span="24">
+                    <van-divider :style="{ color: '#000', borderColor: '#000', padding: '0 16px' }">
+                        手机扫一扫
+                    </van-divider>
+                </van-col>
+            </van-row>
+<!--            <van-row justify="center">-->
+<!--                <van-col span="22">-->
+<!--                    <div v-text="qrcode_url"></div>-->
+<!--                </van-col>-->
+<!--            </van-row>-->
         </template>
 
         <!--<van-overlay :show="show" @click="show = false">
@@ -106,6 +132,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mobile-detect@1.4.5/mobile-detect.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs2@0.0.2/qrcode.min.js"></script>
 
     <script type="module">
         var md = new MobileDetect(window.navigator.userAgent);
@@ -121,6 +148,8 @@
             data() {
                 return {
                     id: searchParams.get('id'),
+                    show_qrcode: !!searchParams.get('show'),
+                    qrcode_url: '',
                     welfares: [],
                     welfare: {},
 					cache_key: 'storage_titles',
@@ -157,10 +186,11 @@
                 console.log('beforeMount');
             },
             mounted() {
-                console.log('mounted', this.id);
+                console.log('mounted', this.id, this.show_qrcode);
 
 		        this.initStorageTitle();
                 this.getData();
+                this.generateQrcode();
             },
             beforeUpdate() {
                 console.log('beforeUpdate');
@@ -251,6 +281,23 @@
                         }
                         console.log(this.welfare);
                     }
+                },
+                generateQrcode() {
+                    if(this.show_qrcode) {
+                        this.qrcode_url = "https://www.jijiwuming.com?id=" + this.id;
+                        new QRCode(document.getElementById("qrcode"), this.qrcode_url);
+                        // var qrcode = new QRCode(document.getElementById("qrcode"), {
+                        //     text: "http://jindo.dev.naver.com/collie",
+                        //     width: 128,
+                        //     height: 128,
+                        //     colorDark : "#000000",
+                        //     colorLight : "#ffffff",
+                        //     correctLevel : QRCode.CorrectLevel.H
+                        // });
+                        // qrcode.clear();
+                        // this.qrcode = qrcode.makeCode("https://www.jijiwuming.com?id=" + this.id);
+                        // console.log(this.qrcode);
+                    }
                 }
             },
             computed: {
@@ -293,7 +340,6 @@
         // app.use(vant.Overlay);
         // app.use(vant.Image);
         // app.use(vant.Lazyload);
-
 
         const vm = app.mount('#app');
         // vm.$refs.swipe.resize();
